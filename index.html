@@ -1,0 +1,797 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>声音的百年 · 录音技术发展史</title>
+
+<!--
+  ============ 图片替换说明 ============
+  1. 在 index.html 同级目录新建文件夹：images/
+  2. 把你的图片按下面的文件名放进去即可，尺寸建议 1200×900（4:3）
+     images/01-1857.jpg    斯科特声波振动器
+     images/02-1877.jpg    爱迪生留声机
+     images/03-1888.jpg    伯利纳碟形唱片
+     images/04-1898.jpg    钢丝录音机
+     images/05-1925.jpg    电气录音 / 麦克风
+     images/06-1948.jpg    LP 黑胶唱片
+     images/07-1949.jpg    45 转 EP 唱片
+     images/08-1963.jpg    盒式磁带
+     images/09-1980.jpg    索尼 Walkman
+     images/10-1982.jpg    CD 播放器
+     images/11-2000.jpg    MP3 播放器
+     images/12-today.jpg   黑胶唱片特写
+  3. 图片没放好时页面不会报错，会自动降级成一张带年份数字的暗色占位卡片。
+-->
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<style>
+  :root{
+    --bg:#08080a;
+    --ink:#f4efe7;
+    --muted:#a09a90;
+    --dim:#6b665e;
+    --gold:#d8a84e;
+    --line:rgba(244,239,231,.12);
+    --serif:"Songti SC","Noto Serif SC","Source Han Serif SC","SimSun",Georgia,serif;
+    --sans:"PingFang SC","Hiragino Sans GB","Microsoft YaHei",system-ui,-apple-system,sans-serif;
+  }
+
+  *,*::before,*::after{ box-sizing:border-box; }
+
+  html{ scroll-behavior:smooth; }
+
+  body{
+    margin:0;
+    background:
+      radial-gradient(1100px 720px at 12% -8%, rgba(216,168,78,.13), transparent 62%),
+      radial-gradient(900px 640px at 104% 108%, rgba(78,110,150,.12), transparent 60%),
+      var(--bg);
+    background-attachment:fixed;
+    color:var(--ink);
+    font-family:var(--sans);
+    -webkit-font-smoothing:antialiased;
+    overflow-x:hidden;
+  }
+
+  /* ============ 顶部滚动进度条 ============ */
+  .progress{
+    position:fixed; top:0; left:0; height:2px; width:0;
+    background:linear-gradient(90deg,#8a6a2c,var(--gold));
+    box-shadow:0 0 14px rgba(216,168,78,.7);
+    z-index:100;
+  }
+
+  /* ============ 首屏 ============ */
+  .hero{
+    min-height:100vh;
+    min-height:100svh;
+    display:flex;
+    flex-direction:column;
+    justify-content:center;
+    align-items:center;
+    text-align:center;
+    padding:0 6vw;
+    position:relative;
+  }
+
+  .hero-eyebrow{
+    margin:0 0 30px;
+    font-size:12px;
+    letter-spacing:.36em;
+    color:var(--gold);
+    text-transform:uppercase;
+  }
+
+  .hero-title{
+    margin:0;
+    font-family:var(--serif);
+    font-weight:600;
+    font-size:clamp(52px,11vw,148px);
+    line-height:1;
+    letter-spacing:.04em;
+    text-shadow:0 24px 70px rgba(0,0,0,.7);
+  }
+  .hero-title em{
+    font-style:normal;
+    color:var(--gold);
+    text-shadow:0 0 50px rgba(216,168,78,.45);
+  }
+
+  .hero-sub{
+    margin:36px 0 0;
+    font-size:clamp(14px,1.35vw,17px);
+    line-height:2.15;
+    letter-spacing:.07em;
+    color:var(--muted);
+  }
+
+  .scroll-hint{
+    position:absolute;
+    bottom:34px; left:0; right:0;
+    margin-inline:auto;
+    width:max-content;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    gap:12px;
+    font-size:11px;
+    letter-spacing:.32em;
+    color:var(--dim);
+  }
+  .scroll-hint i{
+    display:block;
+    width:1px; height:56px;
+    background:linear-gradient(180deg,var(--gold),transparent);
+    transform-origin:top;
+    animation:drop 2.2s ease-in-out infinite;
+  }
+  @keyframes drop{
+    0%{ transform:scaleY(0); opacity:0; }
+    40%{ transform:scaleY(1); opacity:1; }
+    100%{ transform:scaleY(1); opacity:0; }
+  }
+
+  /* ============ 里程碑区块 ============ */
+  .milestone{
+    min-height:100vh;
+    min-height:100svh;
+    display:flex;
+    align-items:center;
+    padding:12vh 6vw;
+  }
+
+  .ms-inner{
+    width:100%;
+    max-width:1200px;
+    margin:0 auto;
+    display:grid;
+    grid-template-columns:1.05fr 1fr;
+    gap:clamp(28px,5vw,76px);
+    align-items:center;
+  }
+
+  /* 奇偶左右交替 */
+  .milestone:nth-of-type(even) .ms-media{ order:2; }
+
+  /* ---- 图片 ---- */
+  .ms-media{ min-width:0; }
+
+  .frame{
+    position:relative;
+    aspect-ratio:4/3;
+    overflow:hidden;
+    border-radius:3px;
+    background:linear-gradient(150deg,#17171a,#0c0c0f 65%);
+    box-shadow:0 44px 90px -46px #000, 0 0 0 1px rgba(244,239,231,.07);
+  }
+
+  /* 图片缺失时露出的年份底纹 */
+  .frame::before{
+    content:attr(data-index);
+    position:absolute; inset:0;
+    display:grid; place-items:center;
+    font-family:var(--serif);
+    font-size:clamp(64px,10vw,124px);
+    letter-spacing:.06em;
+    color:rgba(216,168,78,.16);
+    z-index:0;
+  }
+  .frame::after{
+    content:'';
+    position:absolute; inset:0;
+    box-shadow:inset 0 0 0 1px rgba(216,168,78,.14);
+    pointer-events:none;
+    z-index:3;
+  }
+
+  .frame img{
+    position:relative;
+    z-index:1;
+    display:block;
+    width:100%; height:100%;
+    object-fit:cover;
+    filter:grayscale(.3) sepia(.08) contrast(1.06) brightness(.94);
+    transition:filter .7s ease;
+  }
+  .frame:hover img{
+    filter:grayscale(0) sepia(0) contrast(1.02) brightness(1);
+  }
+
+  /* ---- 文本 ---- */
+  .ms-text{ min-width:0; }
+
+  .ms-tag{
+    display:inline-flex;
+    align-items:center;
+    gap:12px;
+    margin-bottom:20px;
+    font-size:12px;
+    letter-spacing:.26em;
+    text-transform:uppercase;
+    color:var(--gold);
+  }
+  .ms-tag::before{
+    content:'';
+    width:38px; height:1px;
+    background:var(--gold);
+    opacity:.8;
+  }
+
+  .ms-text h2{
+    margin:0 0 22px;
+    font-family:var(--serif);
+    font-weight:600;
+    font-size:clamp(26px,3.4vw,44px);
+    line-height:1.38;
+    letter-spacing:.02em;
+  }
+  .ms-text h2 em{
+    font-style:normal;
+    color:var(--gold);
+  }
+
+  .ms-text p{
+    margin:0;
+    max-width:46ch;
+    font-size:clamp(14px,1.1vw,16px);
+    line-height:2.1;
+    letter-spacing:.02em;
+    color:#b4aea5;
+  }
+
+  .ms-note{
+    margin-top:28px;
+    max-width:46ch;
+    padding:14px 18px;
+    border-left:2px solid rgba(216,168,78,.75);
+    background:linear-gradient(90deg,rgba(216,168,78,.07),transparent 70%);
+    font-size:13px;
+    line-height:1.95;
+    letter-spacing:.02em;
+    color:#98928a;
+  }
+  .ms-note b{ color:#ded7cc; font-weight:500; }
+
+  /* ============ 尾声 ============ */
+  .outro{
+    min-height:72vh;
+    display:flex;
+    flex-direction:column;
+    justify-content:center;
+    align-items:center;
+    text-align:center;
+    padding:14vh 6vw 10vh;
+    border-top:1px solid var(--line);
+  }
+  .outro .quote{
+    margin:0 0 44px;
+    max-width:24ch;
+    font-family:var(--serif);
+    font-size:clamp(18px,2.3vw,30px);
+    line-height:1.95;
+    letter-spacing:.04em;
+    color:#ded7cc;
+  }
+  .outro .credit{
+    margin:0;
+    max-width:58ch;
+    font-size:12px;
+    line-height:2.1;
+    letter-spacing:.14em;
+    color:var(--dim);
+  }
+  .outro .credit a{
+    color:var(--gold);
+    text-decoration:none;
+    border-bottom:1px solid rgba(216,168,78,.35);
+  }
+
+  /* ============ 响应式 ============ */
+  @media (max-width:820px){
+    .milestone{
+      min-height:auto;
+      padding:11vh 6vw;
+    }
+    .ms-inner{
+      grid-template-columns:1fr;
+      gap:30px;
+    }
+    .milestone:nth-of-type(even) .ms-media{ order:0; }
+    .frame{ aspect-ratio:3/2; }
+    .ms-text p, .ms-note{ max-width:100%; }
+    .hero-sub br{ display:none; }
+      /* ============ 首屏小组成员 ============ */
+  .hero-members{
+    margin: 30px 0 0;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: center;
+    gap: 10px 0;
+    max-width: min(760px, 90vw);
+  }
+
+  .members-label{
+    position: relative;
+    padding-right: 20px;
+    font-size: 11px;
+    letter-spacing: .32em;
+    color: var(--gold);
+    text-transform: uppercase;
+  }
+  .members-label::after{
+    content: '';
+    position: absolute;
+    right: 0; top: 50%;
+    transform: translateY(-50%);
+    width: 1px; height: 12px;
+    background: rgba(216,168,78,.45);
+  }
+
+  .members-list{
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    font-size: 13.5px;
+    letter-spacing: .16em;
+    color: #cfc9bf;
+  }
+  .members-list span{
+    display: inline-flex;
+    align-items: center;
+  }
+  .members-list span + span::before{
+    content: '·';
+    margin: 0 14px;
+    color: var(--dim);
+    letter-spacing: 0;
+  }
+
+  @media (max-width: 640px){
+    .hero-members{ margin-top: 24px; flex-direction: column; gap: 14px; }
+    .members-label{ padding-right: 0; }
+    .members-label::after{ display: none; }
+  }
+</style>
+</head>
+<body>
+
+<div class="progress"></div>
+
+<!-- ==================== 首屏 ==================== -->
+<header class="hero">
+  <p class="hero-eyebrow">1857 — TODAY · 一部声音的编年史</p>
+  <h1 class="hero-title">声音的<em>百年</em></h1>
+
+  <!-- 小组成员名单（人数可增删） -->
+  <div class="hero-members">
+    <span class="members-label">第九小组倾情巨献</span>
+    <span class="members-list">
+      <span>范谨瑞 李辅周 唐嘉博 韩左 胡秉松
+    </span>
+  </div>
+  <p class="hero-sub">
+    1877年的一个夏夜，爱迪生对着一台由锡箔圆筒、曲柄和喇叭组成的奇怪机器，唱起了《玛丽有只小羔羊》。
+在此之前，音乐只属于现场——错过了那场音乐会，旋律就永远消散在空气里。而此后的一百多年，人类开始了一场永不停歇的探索：如何把声音捕捉、复制、传播，让亿万人共享同一段旋律。追随着声音的足迹，带着探寻声音故事的好奇心，第九小组的全体成员走进了传媒博物馆。
+  </p>
+  <div class="scroll-hint">
+    <span></span>
+    <i></i>
+  </div>
+</header>
+
+<main>
+
+  <!-- ==================== 01 · 1857 ==================== -->
+  <section class="milestone">
+    <div class="ms-inner">
+      <div class="ms-media">
+        <div class="frame" data-index="01">
+          <img src="images/scott.jpg" alt="1857 斯科特的声波振动器">
+        </div>
+      </div>
+      <div class="ms-text">
+        <div class="ms-tag reveal">1857 · 巴黎 · 声波振动器（图片来源于网络）</div>
+        <h2 class="reveal">声音第一次，<em>被看见</em></h2>
+        <p class="reveal">
+          在留声机诞生之前，想听音乐只能去现场——那是达官贵人的消遣，平民百姓只有自己的哼唱。
+          1857 年，法国发明家斯科特做了一件近乎浪漫的事：让一支针尖随声波的起伏起舞，
+          在涂黑的纸面上刻下蜿蜒的痕迹。他记下了声音的形状，却唤不回声音本身。
+          这是人类第一次，把「听见」变成了「看见」。
+        </p>
+        <div class="ms-note reveal">
+          <b>声波振动器</b>——只能记录波形图像，无法再现声音，却为后来所有的留声机铺下了第一块砖。
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ==================== 02 · 1877 ==================== -->
+  <section class="milestone">
+    <div class="ms-inner">
+      <div class="ms-media">
+        <div class="frame" data-index="02">
+          <img src="images/phonograph2.jpg" alt="1877 爱迪生留声机">
+        </div>
+      </div>
+      <div class="ms-text">
+        <div class="ms-tag reveal">锡箔圆筒留声机 传媒博物馆藏</div>
+        <h2 class="reveal">《玛丽有只小羔羊》，<em>从机器里回来</em></h2>
+        <p class="reveal">
+          爱迪生从电话传话器里得到灵感：既然声音能让短针颤动，那么颤动能否换回声音？
+          1877 年 8 月，助手柯尔希照着图纸做出那台机器——大圆筒、曲柄、说话机，以及一卷锡箔。
+          爱迪生对着它唱了一首童谣。当曲柄再次转动，那个已经消失的声音，从针尖下爬了出来。
+          世界为之轰动，人们称他为「科学界的拿破仑」。
+        </p>
+        <div class="ms-note reveal">
+          <b>1877.12</b> 留声机在巴黎世界博览会展出　·　<b>1878.01</b> 首家公司成立，锡箔圆筒成为世界上第一代声音商品
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ==================== 03 · 1887—1888 ==================== -->
+  <section class="milestone">
+    <div class="ms-inner">
+      <div class="ms-media">
+        <div class="frame" data-index="03">
+          <img src="images/wax_cylinder_record.jpg" alt="蜡筒唱片">
+        </div>
+      </div>
+      <div class="ms-text">
+        <div class="ms-tag reveal">蜡筒唱片 传媒博物馆藏</div>
+        <h2 class="reveal">圆筒的黄昏，<em>唱片的黎明</em></h2>
+        <p class="reveal">
+          圆筒有个致命伤——它无法被复制。录一支小乐队要十台大喇叭留声机同时开工，
+          演奏二十遍才得两百份拷贝，像罚抄课文，绑两支笔也只能抄两遍。
+          1887 年，旅美德国人伯利纳把声音刻进一张扁平的圆盘；
+          1888 年 5 月 6 日，费城，世界第一张碟形唱片开始旋转。
+          两种介质僵持了二十年，唱片赢了。
+        </p>
+        <div class="ms-note reveal">
+          早期唱片每次只能连续播放 <b>5 分钟</b>，手摇式唱机更被当成玩具，用户抱怨歌曲太短、音质太差。
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ==================== 04 · 1898 ==================== -->
+  <section class="milestone">
+    <div class="ms-inner">
+      <div class="ms-media">
+        <div class="frame" data-index="04">
+          <img src="images/vinyl_player.jpg" alt="1898 钢丝录音机">
+        </div>
+      </div>
+      <div class="ms-text">
+        <div class="ms-tag reveal">黑胶唱片机 传媒博物馆藏</div>
+        <h2 class="reveal">把声音，<em>存进一根钢丝</em></h2>
+        <p class="reveal">
+          丹麦工程师普尔森让电流穿过线圈，钢丝被切成无数微小的磁铁，按声音的强弱排成队列。
+          声音从此不再只是刻痕，而是磁的记忆——录，是声波化作电流、电流化作磁场；
+          放，是磁场化作电流、电流化回声波。理论上，只要有一根绕地球一圈的钢丝，
+          就能录下绕地球一圈的声音。
+        </p>
+        <div class="ms-note reveal">
+          录音时长第一次不再是物理的桎梏，<b>无限长</b>成为可能。
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ==================== 05 · 1925 ==================== -->
+  <section class="milestone">
+    <div class="ms-inner">
+      <div class="ms-media">
+        <div class="frame" data-index="05">
+          <img src="images/wire_recorder.jpg" alt="钢丝录音机">
+        </div>
+      </div>
+      <div class="ms-text">
+        <div class="ms-tag reveal">钢丝录音机 传播博物馆藏</div>
+        <h2 class="reveal">从「听个响」，<em>到听见整个乐队</em></h2>
+        <p class="reveal">
+          电气录音之前，声音只能靠机械驱动：乐手要把头伸进大喇叭口，
+          德国人甚至造出喇叭与小提琴杂交的怪乐器来凑音量，音色却一塌糊涂。
+          1925 年，贝尔实验室的电气录音与电动麦克风降临，
+          频率响应从 200–2000Hz 一跃到 100–8000Hz。钢琴终于像钢琴，乐队终于像乐队。
+        </p>
+        <div class="ms-note reveal">
+          也正是在这一年，<b>人声</b>取代乐器成为流行音乐的主角，演唱者走上神坛，成为大众明星。
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ==================== 06 · 1931—1948 ==================== -->
+  <section class="milestone">
+    <div class="ms-inner">
+      <div class="ms-media">
+        <div class="frame" data-index="06">
+          <img src="images/microphone.jpg" alt="电容麦克风">
+        </div>
+      </div>
+      <div class="ms-text">
+        <div class="ms-tag reveal">电容式麦克风 图片来源于网络</div>
+        <h2 class="reveal">三十三又三分之一转，<em>黑胶的黄金年代</em></h2>
+        <p class="reveal">
+          1931 年，RCA 研制出 33⅓ 转的密纹唱片。转速降下来，播放时间就长上去；
+          材料从虫胶换成更细密的材质，颗粒更细，能刻下更微小的震动，高保真由此成为可能。
+          1948 年，哥伦比亚公司大批量生产新一代 LP，黑胶时代正式到来。
+          1950 到 1970 年代，那些把录音当作艺术而非生意的录音大师，
+          与指挥大师和顶级乐团一起，留下了无数传世的声响。
+        </p>
+        <div class="ms-note reveal">
+          一张唱片，从此可以装下<b>一整场音乐会</b>。
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ==================== 07 · 1949 ==================== -->
+  <section class="milestone">
+    <div class="ms-inner">
+      <div class="ms-media">
+        <div class="frame" data-index="07">
+          <img src="images/vinyl_disk.jpg" alt="1949 45 转 EP 唱片">
+        </div>
+      </div>
+      <div class="ms-text">
+        <div class="ms-tag reveal">密纹唱片 传媒博物馆藏</div>
+        <h2 class="reveal">小小的四十五转，<em>装下整个青春</em></h2>
+        <p class="reveal">
+          RCA 推出 45 转唱片：直径更小、更薄、不易碎，运输成本低；
+          音质优于 78 转，甚至比部分 LP 更好。它配上自带喇叭的便携唱机，
+          成了青少年的口袋乐队，催熟了 1950 年代的单曲市场——
+          那种「一张碟两三首歌」的迷你专辑形态，一直沿用至今。
+        </p>
+        <div class="ms-note reveal">
+          唱片越小，青春越近。<b>单曲市场</b>的繁荣，正是从这一圈 45 转开始的。
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ==================== 08 · 1935—1963 ==================== -->
+  <section class="milestone">
+    <div class="ms-inner">
+      <div class="ms-media">
+        <div class="frame" data-index="08">
+          <img src="images/vinyl_45RPM.jpg" alt="45转唱片">
+        </div>
+      </div>
+      <div class="ms-text">
+        <div class="ms-tag reveal">笔者本人收藏的45转EP唱片</div>
+        <h2 class="reveal">一卷磁带，<em>剪辑时间</em></h2>
+        <p class="reveal">
+          1935 年，德国通用电气公司造出使用塑料磁带的录音机。
+          1963 年，飞利浦把磁带装进一只双面塑料小盒——盒式磁带诞生，
+          体积只有早期循环磁带机的四分之一，每面能装 30 到 45 分钟。
+          录音时长不再受限，可靠、机动，还能剪开重接。
+          1971 年磁带被认真用于音乐录制，1976 年首盘 120 分钟磁带问世。
+        </p>
+        <div class="ms-note reveal">
+          声音第一次，<b>可以被编辑</b>。剪辑台，成了新的创作现场。
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ==================== 09 · 1980s ==================== -->
+  <section class="milestone">
+    <div class="ms-inner">
+      <div class="ms-media">
+        <div class="frame" data-index="09">
+          <img src="images/music_tapes.jpg" alt="盒式磁带">
+        </div>
+      </div>
+      <div class="ms-text">
+        <div class="ms-tag reveal">盒式磁带 传媒博物馆藏</div>
+        <h2 class="reveal">把音乐，<em>装进口袋</em></h2>
+        <p class="reveal">
+          在那之前，人们背着硕大的双喇叭录音机边走边唱。
+          索尼 Walkman 出现之后，耳机线垂下来，世界退到身后——
+          音乐第一次只属于一个人。盒式磁带取代黑胶，
+          成为便携音乐市场的象征。城市从此有了自己的背景音。
+        </p>
+        <div class="ms-note reveal">
+          聆听，从一件<b>公共的事</b>，变成了一件<b>私人的事</b>。
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ==================== 10 · 1982 ==================== -->
+  <section class="milestone">
+    <div class="ms-inner">
+      <div class="ms-media">
+        <div class="frame" data-index="10">
+          <img src="images/micro_tape_player.jpg" alt="小型播放器">
+        </div>
+      </div>
+      <div class="ms-text">
+        <div class="ms-tag reveal">小型磁带播放器 传媒博物馆藏</div>
+        <h2 class="reveal">水晶般清澈的，<em>0 与 1</em></h2>
+        <p class="reveal">
+          1974 年，飞利浦与索尼联手发表音乐光盘。1982 年 10 月 1 日，
+          索尼在日本发布世界第一部商用 CD 播放器 CDP-101；同一年，
+          全球首张 CD 在德国汉诺威的飞利浦工厂诞生。
+          黑胶那「丝丝啪啪」的底噪退场，取而代之的是一种如水晶般透明清澈的聆听体验。
+          数字音频的序幕，就此拉开。
+        </p>
+        <div class="ms-note reveal">
+          1977 年，旅行者 1 号、2 号各携带一张「地球之音」唱片飞向星际——55 种语言问候、90 分钟音乐、118 幅图像，人类试着用声音向宇宙自我介绍。
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ==================== 11 · 1995—2000 ==================== -->
+  <section class="milestone">
+    <div class="ms-inner">
+      <div class="ms-media">
+        <div class="frame" data-index="11">
+          <img src="images/CD.jpg" alt="2000 年前后 MP3 播放器">
+        </div>
+      </div>
+      <div class="ms-text">
+        <div class="ms-tag reveal">依旧是笔者本人收藏的一张CD唱片</div>
+        <h2 class="reveal">压缩，然后<em>席卷一切</em></h2>
+        <p class="reveal">
+          更小的体积，尚可的音质，易于播放、制作与分享。
+          MP3 借着网络在 1990 年代末迅速蔓延，2000 年前后风行全球，
+          便携式播放器随之普及。代价是漫长的版权纠纷，
+          唱片工业与创作者的权益被狠狠冲击。
+          而当智能手机到来，MP3 播放器比它的所有前辈消失得都快。
+        </p>
+        <div class="ms-note reveal">
+          载体越来越轻，音乐越来越容易得到——也< b>越来越容易被忽略</b>。
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ==================== 12 · 今天 ==================== -->
+  <section class="milestone">
+    <div class="ms-inner">
+      <div class="ms-media">
+        <div class="frame" data-index="12">
+          <img src="images/iPod.jpg" alt="iPod">
+        </div>
+      </div>
+      <div class="ms-text">
+        <div class="ms-tag reveal">苹果公司发布的iPod系列音乐播放器（图片来源于网络）</div>
+        <h2 class="reveal">一百年，<em>声音绕了一圈</em></h2>
+        <p class="reveal">
+          从爱迪生的锡箔圆筒到云端的一条链接，科技让聆听变得前所未有的轻易，
+          也悄悄带走了某种仪式感。于是黑胶重新转起来：
+          CD 用二进制记录，与母带之间必然存在信息损失，如同画像与模特；
+          而黑胶是模拟记录，与母带内容一致，只有转录途中的传输损耗，
+          如同同一个人在不同时间摆出同一个姿势。
+           <div class="ms-inner">
+      <div class="ms-media">
+        <div class="frame" data-index="12">
+          <img src="images/redemption.jpg" alt="iPod">
+        </p>
+        <div class="ms-note reveal">
+          在快节奏的生活里，人们把针头轻轻放下，等那一声「丝丝啪啪」——<b>找回一点郑重其事</b>。
+     
+    </div>
+  </section>
+
+</main>
+
+<!-- ==================== 尾声 ==================== -->
+<footer class="outro">
+  <p class="quote reveal">一百年，人类把空气的颤动，<br>做成了可以随身携带的记忆。</p>
+  <p class="credit reveal">
+  </p>
+</footer>
+
+<!-- ==================== GSAP ==================== -->
+<script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/gsap.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/ScrollTrigger.min.js"></script>
+
+<script>
+(function () {
+  'use strict';
+
+  gsap.registerPlugin(ScrollTrigger);
+
+  /* ---------- 图片缺失时优雅降级 ---------- */
+  document.querySelectorAll('.frame img').forEach(function (img) {
+    var hide = function () { img.style.opacity = '0'; };
+    if (img.complete && img.naturalWidth === 0) hide();
+    img.addEventListener('error', hide);
+  });
+
+  /* ---------- 顶部滚动进度条（始终开启） ---------- */
+  gsap.to('.progress', {
+    width: '100%',
+    ease: 'none',
+    scrollTrigger: {
+      trigger: document.documentElement,
+      start: 'top top',
+      end: 'bottom bottom',
+      scrub: 0.4
+    }
+  });
+
+  /* ---------- 尊重「减少动态效果」偏好 ---------- */
+  var prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  if (prefersReduced) return;
+
+  /* ---------- 首屏入场 ---------- */
+    gsap.timeline({ delay: 0.25 })
+    .from('.hero-eyebrow', { y: 60, opacity: 0, duration: 1, ease: 'power3.out' })
+    .from('.hero-title',   { y: 100, opacity: 0, duration: 1.2, ease: 'power3.out' }, '-=0.7')
+    .from('.hero-members', { y: 60, opacity: 0, duration: 1, ease: 'power3.out' }, '-=0.8')
+    .from('.hero-sub',     { y: 60, opacity: 0, duration: 1, ease: 'power3.out' }, '-=0.88')
+    .from('.scroll-hint',  { y: 40, opacity: 0, duration: 0.8, ease: 'power2.out' }, '-=0.5');
+   
+  /* ---------- 每个里程碑：图片 + 文字从屏幕下方滑上来 ---------- */
+  document.querySelectorAll('.milestone').forEach(function (section) {
+    var frame = section.querySelector('.frame');
+    var img   = section.querySelector('.frame img');
+    var texts = section.querySelectorAll('.reveal');
+    if (!frame) return;
+
+    var tl = gsap.timeline({
+      scrollTrigger: {
+        trigger: section,
+        start: 'top 80%',
+        once: true
+      }
+    });
+
+    // 图片块整体从下方升起
+    tl.from(frame, {
+      y: 180,
+      opacity: 0,
+      duration: 1.1,
+      ease: 'power3.out'
+    });
+
+    // 图片内部的缓慢推近，制造"显影"感
+    if (img) {
+      tl.from(img, {
+        scale: 1.28,
+        duration: 1.6,
+        ease: 'power2.out'
+      }, 0);
+    }
+
+    // 文字逐行从下方升起
+    if (texts.length) {
+      tl.from(texts, {
+        y: 130,
+        opacity: 0,
+        duration: 0.9,
+        stagger: 0.11,
+        ease: 'power3.out'
+      }, 0.16);
+    }
+  });
+
+  /* ---------- 尾声 ---------- */
+  gsap.from('.outro .reveal', {
+    y: 70,
+    opacity: 0,
+    duration: 1,
+    stagger: 0.22,
+    ease: 'power3.out',
+    scrollTrigger: {
+      trigger: '.outro',
+      start: 'top 85%',
+      once: true
+    }
+  });
+
+  /* ---------- 布局变化后刷新触发器 ---------- */
+  window.addEventListener('load', function () { ScrollTrigger.refresh(); });
+})();
+</script>
+
+</body>
+</html>
